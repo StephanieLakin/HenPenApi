@@ -34,18 +34,22 @@ namespace HenPenApi.Controllers
         [HttpPut]
         public async Task<ActionResult<List<Hen>>> UpdateHen(Hen hen)
         {
-            var dbHen = await _context.Hens.FindAsync(hen.Id);
+            var dbHen = await _context.Hens.FindAsync(hen.HenId);
             if (dbHen == null)
             
                 return BadRequest("Hen not found");
             
-                dbHen.Name = hen.Name;
-                dbHen.Breed = hen.Breed;
+                dbHen.HenName = hen.HenName;
                 dbHen.Description = hen.Description;
-                dbHen.Age = hen.Age;
+                dbHen.DOB = hen.DOB;
                 dbHen.Weight = hen.Weight;
                 dbHen.EggColor = hen.EggColor;
                 dbHen.WklyEggAvg = hen.WklyEggAvg;
+                dbHen.HealthIssue = hen.HealthIssue;
+                dbHen.Medications = hen.Medications;
+                dbHen.Notes = hen.Notes;
+                dbHen.Breed = hen.Breed;
+
 
             await _context.SaveChangesAsync();
             return Ok(await _context.Hens.ToListAsync());                        
