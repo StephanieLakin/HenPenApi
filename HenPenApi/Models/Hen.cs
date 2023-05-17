@@ -18,7 +18,7 @@ namespace HenPenApi.Models
         public string? Medications { get; set; }
         public string? Notes { get; set; }
 
-        [Column(TypeName = "varchar(250)")]
+        [Column(TypeName = "nvarchar(250)")]
         public Breed? Breed { get; set; }
 
     }

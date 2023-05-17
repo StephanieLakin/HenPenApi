@@ -23,6 +23,24 @@ namespace HenPenApi.Controllers
             return Ok(await _context.Hens.ToListAsync());
         }
 
+        // GET: api/Hen
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Hen>> GetHen(int id)
+        {
+            if (_context.Hens == null)
+            {
+                return NotFound();
+            }
+            var hen = await _context.Hens.FindAsync(id);
+
+            if (hen == null)
+            {
+                return NotFound();
+            }
+
+            return hen;
+        }
+
         [HttpPost]
         public async Task<ActionResult<List<Hen>>> CreateHen(Hen hen)
         {

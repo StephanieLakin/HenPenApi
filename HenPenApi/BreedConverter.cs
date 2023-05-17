@@ -1,30 +1,45 @@
-﻿using System.Text.Json;
-using HenPenApi.Models;
+﻿using HenPenApi.Models;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Text.Json;
 
-namespace HenPenApi
+public class BreedConverter : ValueConverter<Breed?, string?>
 {
-    public class BreedConverter : ValueConverter<Breed?, string?>
+    public BreedConverter(ConverterMappingHints? mappingHints = null)
+        : base(
+            breed => ConvertToString(breed),
+            str => ConvertToBreed(str),
+            mappingHints)
     {
-        public BreedConverter(ConverterMappingHints? mappingHints = null)
-                : base(
-                      breed => ConvertToString(breed),
-                      str => ConvertToBreed(str),
-                      mappingHints)
+    }
+
+    private static string? ConvertToString(Breed? breed)
+    {
+        if (breed != null)
         {
+            string jsonString = JsonSerializer.Serialize(breed);
+            return jsonString;
         }
 
-        private static string? ConvertToString(Breed? breed)
+        return null;
+    }
+
+    private static Breed? ConvertToBreed(string? str)
+    {
+        if (str != null)
         {
-            // Convert the Breed object to a JSON representation
-            // You can customize this logic based on your requirements
-            return breed != null ? JsonSerializer.Serialize(breed) : null;
+            try
+            {
+                Breed? breed = JsonSerializer.Deserialize<Breed?>(str);
+                return breed;
+            }
+            catch (JsonException ex)
+            {
+                // Handle the exception here
+                Console.WriteLine("Error deserializing JSON: " + ex.Message);
+                return null;
+            }
         }
 
-        private static Breed? ConvertToBreed(string? str)
-        {
-            // Convert the JSON representation back to a Breed object
-            return str != null ? JsonSerializer.Deserialize<Breed>(str) : null;
-        }
+        return null;
     }
 }
